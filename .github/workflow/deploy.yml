@@ -1,0 +1,42 @@
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version: [ '1.19', '1.20', '1.21.x' ]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: Install dependencies
+        run: go get .
+#      - name: Test with Go
+#        run: go test -json > TestResults-${{ matrix.go-version }}.json
+#      - name: Upload Go test results
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: Go-results-${{ matrix.go-version }}
+#          path: TestResults-${{ matrix.go-version }}.json
+
+      - name: Login to Oracle Cloud
+        uses: oracle/oci-cli-action@v2
+        with:
+          config-file: ${{ secrets.OCI_CONFIG_FILE }}
+          profile-name: ${{ secrets.OCI_PROFILE_NAME }}
+          region: ${{ secrets.OCI_REGION }}
+          auth: ${{ secrets.OCI_AUTH }}
+
+      - name: docker build and push
+        run: |
+          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/go-hello-world .
+          docker push ${{ secrets.DOCKER_USERNAME }}/go-hello-world
