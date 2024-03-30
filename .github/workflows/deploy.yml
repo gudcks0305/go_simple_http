@@ -32,5 +32,5 @@ jobs:
         run: |
           echo ${{ secrets.DOCKER_PASSWORD }} | docker login ${{secrets.OCIR_REGION_URL}} -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
           
-          docker build -t ${{ secrets.OCIR_REGION_URL }}/test-repo/go-hello-world:latest .
-          docker push ${{ secrets.OCIR_REGION_URL }}/test-repo/go-hello-world:latest
+          docker build -t ${{ secrets.OCIR_REGION_URL }}/${{secrets.OCIR_REGION_URL}}/go-hello-world:latest .
+          docker push ${{ secrets.OCIR_REGION_URL }}/${{secrets.OCIR_REGION_URL}}/go-hello-world:latest
