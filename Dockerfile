@@ -13,7 +13,7 @@ RUN go mod tidy
 
 COPY . .
 
-RUN GO111MODULE=on CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -ldflags="-s -w" -o bin/main app/main.go;
+RUN GO111MODULE=on CGO_ENABLED=0 GOOS=linux GOARCH=aarc64 go build -a -ldflags="-s -w" -o bin/main app/main.go;
 # compile & pack
 
 ### Executable Image
