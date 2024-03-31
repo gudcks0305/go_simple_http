@@ -32,5 +32,5 @@ jobs:
         run: |
           echo ${{ secrets.DOCKER_PASSWORD }} | docker login ${{secrets.OCIR_REGION_URL}} -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
           
-          docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t ${{ secrets.OCIR_REGION_URL }}/${{secrets.OCIR_NAME_SPACE}}/go-hello-world:latest .
+          docker build --platform linux/arm64 -t ${{ secrets.OCIR_REGION_URL }}/${{secrets.OCIR_NAME_SPACE}}/go-hello-world:latest .
           docker push ${{ secrets.OCIR_REGION_URL }}/${{secrets.OCIR_NAME_SPACE}}/go-hello-world:latest

@@ -1,4 +1,4 @@
-FROM golang:1.22-alpine3.19 AS builder
+FROM arm64v8/golang:1.22-alpine3.19 AS builder
 
 RUN apk update; \
     apk add git ca-certificates
