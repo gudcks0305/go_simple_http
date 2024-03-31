@@ -13,9 +13,8 @@ RUN go mod tidy
 
 COPY . .
 
-RUN GO111MODULE=on CGO_ENABLED=1  go build -a -ldflags="-s -w" -buildmode=c-shared -o bin/main app/main.go;
+RUN GO111MODULE=on CGO_ENABLED=0  go build -a -ldflags="-s -w" -tags=rhel -o bin/main app/main.go;
 # compile & pack
-## -rpath=/usr/lib64" is for REDHAT OS
 
 ### Executable Image
 FROM alpine
@@ -24,5 +23,5 @@ COPY --from=builder /usr/src/app/bin/main ./main
 
 ENV PORT=80
 EXPOSE 80
-RUN CHMOD +X ./main
+
 ENTRYPOINT ["./main"]
