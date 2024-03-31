@@ -1,8 +1,10 @@
 FROM golang:1.22-alpine3.19 AS builder
 
 RUN apk update; \
-    apk add git ca-certificates; \
-     apt-get install -y gcc-aarch64-linux-gnu
+    apk add git ca-certificates;  \
+    apk add --update gcc musl-dev
+
+
 WORKDIR /usr/src/app
 
 COPY go.mod .
@@ -13,12 +15,12 @@ RUN go mod tidy
 
 COPY . .
 
-RUN GO111MODULE=on CC=aarch64-linux-gnu-gcc CGO_ENABLED=1 GOOS=linux GOARCH=arm64 go build -a -ldflags="-s -w" -o bin/main app/main.go;
+RUN GO111MODULE=on CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -a -ldflags="-s -w" -o bin/main app/main.go;
 # compile & pack
 
 ### Executable Image
-FROM alpine
-
+#FROM alpine
+FROM arm64/busybox
 COPY --from=builder /usr/src/app/bin/main ./main
 
 ENV PORT=80
