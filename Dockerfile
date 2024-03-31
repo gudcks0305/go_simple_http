@@ -21,4 +21,5 @@ FROM alpine
 
 COPY --from=builder /usr/src/app/bin/main ./main
 
+EXPOSE 8080
 ENTRYPOINT ["./main"]
