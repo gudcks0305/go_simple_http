@@ -19,8 +19,7 @@ RUN GO111MODULE=on CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -a -ldflags="-
 # compile & pack
 
 ### Executable Image
-#FROM alpine
-FROM arm64/busybox
+FROM alpine
 COPY --from=builder /usr/src/app/bin/main ./main
 
 ENV PORT=80
