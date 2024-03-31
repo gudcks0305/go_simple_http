@@ -1,4 +1,4 @@
-FROM arm64v8/golang:1.22-alpine3.19 AS builder
+FROM golang:1.22-alpine3.19 AS builder
 
 RUN apk update; \
     apk add git ca-certificates
@@ -13,7 +13,7 @@ RUN go mod tidy
 
 COPY . .
 
-RUN GO111MODULE=on CGO_ENABLED=0  go build -a -ldflags="-s -w" -tags=rhel -o bin/main app/main.go;
+RUN GO111MODULE=on CGO_ENABLED=0  go build -a -ldflags="-s -w"  -tags netgo -o bin/main app/main.go;
 # compile & pack
 
 ### Executable Image
