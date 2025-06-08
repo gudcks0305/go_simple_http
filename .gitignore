@@ -1,0 +1,10 @@
+# Go
+/bin/
+*.db
+
+# Flutter
+client/build/
+client/.dart_tool/
+client/.packages
+client/.flutter-plugins*
+client/.metadata

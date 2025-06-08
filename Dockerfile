@@ -1,25 +1,17 @@
-FROM golang:1.22-alpine3.19 AS builder
+FROM golang:1.23-alpine AS builder
 
-RUN apk update; \
-    apk add git ca-certificates
+RUN apk add --no-cache git
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY go.mod .
-#COPY go.sum .
+RUN go mod download
 
-RUN go mod tidy
-# install dependencies
+COPY server ./server
 
-COPY . .
+RUN CGO_ENABLED=0 go build -o /bin/server ./server
 
-RUN GO111MODULE=on CGO_ENABLED=0  go build -a -ldflags="-s -w"  -tags netgo -o bin/main app/main.go;
-# compile & pack
-
-### Executable Image
 FROM alpine
-
-COPY --from=builder /usr/src/app/bin/main ./main
-
+COPY --from=builder /bin/server /server
 EXPOSE 8080
-ENTRYPOINT ["./main"]
+ENTRYPOINT ["/server"]
